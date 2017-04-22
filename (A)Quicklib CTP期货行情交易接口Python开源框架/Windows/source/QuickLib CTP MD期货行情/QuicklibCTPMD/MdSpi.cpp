@@ -5237,7 +5237,7 @@ void   CMdSpi::RegisterNameServer(char *pszNsAddress)
 
 int CMdSpi::ReqUserLogin()
 {
-	std::cout << "--->>> " << __FUNCTION__ << std::endl;
+	//std::cout << "--->>> " << __FUNCTION__ << std::endl;
 	CThostFtdcReqUserLoginField req;
 	memset(&req, 0, sizeof(req));
 	strcpy(req.BrokerID, gBrokerID.c_str());
@@ -5256,7 +5256,7 @@ int CMdSpi::ReqUserLogin()
 
 int CMdSpi::ReqUserLogout()
 {
-	std::cout << "--->>> " << __FUNCTION__ << std::endl;
+	//std::cout << "--->>> " << __FUNCTION__ << std::endl;
 	CThostFtdcUserLogoutField req;
 
 	//CThostFtdcReqUserLoginField req;
@@ -5286,7 +5286,7 @@ void CMdSpi::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,CThostFtd
 	}
 
 	std::cout << "login:\t" << pRspInfo->ErrorMsg << std::endl;
-	std::cout << "<-- " << __FUNCTION__ << std::endl;
+	//std::cout << "<-- " << __FUNCTION__ << std::endl;
 	if (bIsLast && !IsErrorRspInfo(pRspInfo))
 	{
 		///获取当前交易日
@@ -5764,7 +5764,7 @@ void CMdSpi::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarketDa
 	{
 		return;
 	}
-	 std::cout << "data: " << pDepthMarketData->InstrumentID << pDepthMarketData->LastPrice<<std::endl;
+	 //std::cout << "data: " << pDepthMarketData->InstrumentID << pDepthMarketData->LastPrice<<std::endl;
 	//本机时间过滤
 	double Nowtime = GetLocalTimeSec2();
 	if (begintime1 > -0.1 && endtime1 > -0.1)
@@ -5831,9 +5831,9 @@ void CMdSpi::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarketDa
 		LeaveCriticalSection(&g_csdata);
 		//时间驱动
 		SetEvent(hEvent[EID_OnRtnDepthMarketData]);
-		return;
+		//return;
 		//下面的暂时屏蔽，对多策略
-
+		/*
        //生成周期价格数据
 		string instrumentstr = pDepthMarketData->InstrumentID;
 		QS_Strategy_Map::iterator it = mapStrategy.find(instrumentstr);
@@ -5872,6 +5872,7 @@ void CMdSpi::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMarketDa
 				}
 			}
 		}
+		*/
 	}
 }
 

@@ -191,6 +191,7 @@ def main():
             mddict[market.OnCmd()]()
             print(u"Get A New cmd(MD)\n");                 
              
+            #2种方式取价格，一种是通过回调，一种是直接取价格而不通过回调
             #直接指定名称打印数据
             print market.LastPrice('zn1701')     #打印该品种在行情接口的变量LastPrice (最新价)
             print market.BidPrice1('zn1705')     #打印该品种在行情接口的变量BidPrice
