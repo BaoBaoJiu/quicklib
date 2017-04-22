@@ -86,8 +86,52 @@ def MD_OnEmptyCmd():
     #回调指令缓冲区已为空（因为短时间获得多个指令，时间间隔态度，在下面的for i in range(market.GetUnGetCmdSize()):循环执行了多次已经完成了）
     print "---------------MD_OnEmptyCmd---------------" 
 def MD_OnUserLogin():
-    #登录成功
-    #global market
+    #登录行情服务器成功
+    if True:
+        #订阅品种zn1610，接收Tick数据,不根据Tick生成其他周期价格数据,但可根据AddPeriod函数添加周期价格数据的设置
+        market.Subcribe('rb1705')                
+        market.Subcribe('zn1705')
+        market.Subcribe('ag1706')
+        market.Subcribe('au1706')
+        market.Subcribe('ni1701')
+        market.Subcribe('m1705')
+        market.Subcribe('y1705')
+        market.Subcribe('bu1706')
+        market.Subcribe('i1705')
+        market.Subcribe('CF1705')
+    else:
+        #读取合约订阅的配置文件
+        #配置文件订阅函数下个版本修复，本例暂时采用Subcribe方法订阅
+        market.ReadInstrumentIni()
+ 
+    # 订阅合约时，请注意合约的大小写，中金所和郑州交易所是大写，上海和大连期货交易所是小写的
+    # ReadInstrumentIni(True)调用订阅函数Subcribe，可以用AddPeriod函数添加周期参数
+    # 尽量避免使用不到的周期参数，可以节省内存和CPU占用
+    # 周期参数：
+    # QL_M1    1分钟周期
+    # QL_M3    3分钟周期
+    # QL_M5    5分钟周期
+    # QL_M10   10分钟周期 
+    # QL_M15   15分钟周期
+    # QL_M30   30分钟周期
+    # QL_M60   60分钟周期
+    # QL_M120  120分钟周期
+    # QL_D1    日线周期
+    # QL_ALL   包括了所有周期(QL_M1,QL_M3,QL_M5,QL_M10,QL_M15,QL_M30,QL_M60,QL_M120,QL_D1)  
+    
+    #给au1612添加根据tick生成的周期，尽量避免添加不适用的周期数据，可以降低CPU和内存占用
+    market.AddPeriod('zn1705',QL_M10)   #添加M3周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
+    #market.AddPeriod('ag1612',QL_M10)  #添加M10周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
+    #market.AddPeriod('ag1612',QL_M5)   #添加M5周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
+    #market.AddPeriod('zn1610',QL_ALL)  #添加所有M1、M3、M5、M10、M15、M30、M60、M120、D1周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
+    
+    #保存Tick数据,参数1表示简单模式
+    #market.SaveTick(2)
+    
+    print ('number:',  market.InstrumentNum)    
+    
+    
+    
     print "---------------MD_OnUserLogin---------------" 
     data = cast(market.GetCmdContent_LoginScuess(), POINTER(QL_CThostFtdcRspUserLoginField))
     print "TradingDay %s"%(str(data[0].TradingDay))              #交易日
@@ -209,49 +253,13 @@ def MDThread(func):
     #设置拒绝接收行情服务器数据的时间，有时候（特别是模拟盘）在早晨6-8点会发送前一天的行情数据，若不拒收的话，会导致历史数据错误，本方法最多可以设置4个时间段进行拒收数据
     market.SetRejectdataTime(0.0400, 0.0840, 0.1530, 0.2030, NULL, NULL, NULL, NULL);    
 
-    #读取合约订阅的配置文件
+
+    #订阅行情，请放在登录行情成功的回调函数MD_OnUserLogin中
+    #如果交易程序一直在线，收盘后，下一次开盘时，行情  自动连接行情服务器->自动登录行情 但不会自动订阅，需要通过在python的回调函数MD_OnUserLogin（表示重新登录行情成功）里重新订阅合约
+    #若放在以下main函数里订阅，而不在回调中，则收盘后，再开盘，程序会自动连接行情服务器，并登录，但是不会重新订阅。本例已经已将订阅合约代码放至回调函数MD_OnUserLogin
     
-    if True:
-        #订阅品种zn1610，接收Tick数据,不根据Tick生成其他周期价格数据,但可根据AddPeriod函数添加周期价格数据的设置
-        market.Subcribe('rb1705')                
-        market.Subcribe('zn1705')
-        market.Subcribe('ag1706')
-        market.Subcribe('au1706')
-        market.Subcribe('ni1701')
-        market.Subcribe('m1705')
-        market.Subcribe('y1705')
-        market.Subcribe('bu1706')
-        market.Subcribe('i1705')
-        market.Subcribe('CF1705')
-    else:
-        #配置文件订阅函数下个版本修复，本例暂时采用Subcribe方法订阅
-        market.ReadInstrumentIni()
- 
-    # 订阅合约时，请注意合约的大小写，中金所和郑州交易所是大写，上海和大连期货交易所是小写的
-    # ReadInstrumentIni(True)调用订阅函数Subcribe，可以用AddPeriod函数添加周期参数
-    # 尽量避免使用不到的周期参数，可以节省内存和CPU占用
-    # 周期参数：
-    # QL_M1    1分钟周期
-    # QL_M3    3分钟周期
-    # QL_M5    5分钟周期
-    # QL_M10   10分钟周期 
-    # QL_M15   15分钟周期
-    # QL_M30   30分钟周期
-    # QL_M60   60分钟周期
-    # QL_M120  120分钟周期
-    # QL_D1    日线周期
-    # QL_ALL   包括了所有周期(QL_M1,QL_M3,QL_M5,QL_M10,QL_M15,QL_M30,QL_M60,QL_M120,QL_D1)  
-    
-    #给au1612添加根据tick生成的周期，尽量避免添加不适用的周期数据，可以降低CPU和内存占用
-    market.AddPeriod('zn1705',QL_M10)   #添加M3周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
-    #market.AddPeriod('ag1612',QL_M10)  #添加M10周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
-    #market.AddPeriod('ag1612',QL_M5)   #添加M5周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
-    #market.AddPeriod('zn1610',QL_ALL)  #添加所有M1、M3、M5、M10、M15、M30、M60、M120、D1周期（未在Subcribe、Subcribe1~Subcribe8函数中指定的周期，可以在本函数补充该品种周期，可多次调用函数设置同时保存多个周期）
-    
-    #保存Tick数据,参数1表示简单模式
-    #market.SaveTick(2)
-    
-    print ('number:',  market.InstrumentNum)
+
+
     # main()函数内的以上部分代码只执行一次，以下while(1)循环内的代码，会一直循环执行，可在这个循环内需增加策略判断，达到下单条件即可下单
 
     if False:
