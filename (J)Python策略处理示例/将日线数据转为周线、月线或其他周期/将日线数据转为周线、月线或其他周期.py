@@ -5,9 +5,9 @@ import pandas as pd
 # ========== 从原始csv文件中导入日线股票数据，以浦发银行sh600000为例
 
 # 导入数据 - 注意：这里请填写数据文件在您电脑中的路径
-stock_data = pd.read_csv('trading-data@full/stock data/sh600000.csv', parse_dates=[1])
+#stock_data = pd.read_csv('trading-data@full/stock data/sh600000.csv', parse_dates=[1])
 
-
+stock_data = pd.read_csv('sh600000.csv', parse_dates=[1])
 
 
 # ========== 将导入的日线数据stock_data，转换为周线数据period_stock_data
