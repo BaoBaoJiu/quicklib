@@ -3,7 +3,7 @@ import pandas as pd
 
 # ==========导入上证指数的原始数据
 # 注意：这里请填写数据文件在您电脑中的路径，并注意路径中斜杠的方向
-index_data = pd.read_csv('index data/sh000001.csv', parse_dates=['date'])
+index_data = pd.read_csv('index data/sh600000.csv', parse_dates=['date'])
 # 保留这几个需要的字段：'date', 'high', 'low', 'close', 'change'
 index_data = index_data[['date', 'high', 'low', 'close', 'change']]
 # 对数据按照【date】交易日期从小到大排序

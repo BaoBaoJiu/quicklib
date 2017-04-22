@@ -5,7 +5,16 @@ import pandas as pd
 # ========== 从原始csv文件中导入股票数据，以浦发银行sh600000为例
 
 # 导入数据 - 注意：这里请填写数据文件在您电脑中的路径
-stock_data = pd.read_csv('stock data/sh600000.csv', parse_dates=[1])
+stock_data = pd.read_csv('sh600000.csv', parse_dates=[1])
+
+ 
+ 
+#    data1 key  data2  
+#0      0   a      0  
+#1      1   b      1  
+#2      2   b      1  
+
+
 
 # 将数据按照交易日期从远到近排序
 stock_data.sort('date', inplace=True)

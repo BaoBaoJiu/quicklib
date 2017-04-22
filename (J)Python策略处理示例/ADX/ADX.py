@@ -39,7 +39,8 @@ def get_stock_data(stock_code):
     :return: 返回股票数据集（代码，日期，开盘价，收盘价，涨跌幅）
     """
     # 此处为存放csv文件的本地路径，请自行改正地址
-    stock_data = pd.read_csv('e:/data/stock data/' + str(stock_code) + '.csv', parse_dates=['date'], index_col='date')
+    #stock_data = pd.read_csv('e:/data/stock data/' + str(stock_code) + '.csv', parse_dates=['date'], index_col='date')
+    stock_data = pd.read_csv(str(stock_code) + '.csv', parse_dates=['date'], index_col='date')
     stock_data = stock_data[['code', 'open', 'close', 'high', 'low', 'change']]
     stock_data.sort_index(inplace=True)
 
