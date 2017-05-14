@@ -1,0 +1,7 @@
+http://www.quicklib.cn/pythonpai_arm1.6.apk
+
+更新：修复菜单BUG
+
+适用于Android4.3 以上版本
+
+（适合ARM架构CPU，对小众的X86架构CPU可能无法运行，具体测试请反馈）

@@ -86,6 +86,9 @@ def MD_OnEmptyCmd():
     #回调指令缓冲区已为空（因为短时间获得多个指令，时间间隔态度，在下面的for i in range(market.GetUnGetCmdSize()):循环执行了多次已经完成了）
     print "---------------MD_OnEmptyCmd---------------" 
 def MD_OnUserLogin():
+    
+    
+    
     #登录行情服务器成功
     if True:
         #订阅品种zn1610，接收Tick数据,不根据Tick生成其他周期价格数据,但可根据AddPeriod函数添加周期价格数据的设置
